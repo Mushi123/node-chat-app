@@ -19,17 +19,10 @@ io.on('connection',(socket) => {
   socket.emit('newMessage',generateMessage('Admin','Welcome to chat app'));
 
   socket.broadcast.emit('newMessage',generateMessage('Admin','New User joined'))
-  // socket.emit('newMessage',{
-  //   from:"mush@eg.com",
-  //   text:"Hey sup!!",
-  //   createdAt:1231223
-  // })
-  // socket.on('createEmail',function(email){
-  //   console.log("Email to create", email);
-  // })
-  socket.on('createMessage',(message) => {//emits an event to a single connection
+  socket.on('createMessage',(message,callback) => {//emits an event to a single connection
     console.log("createMessage ",message);
     io.emit('newMessage',generateMessage(message.from,message.text))
+    callback("This is from server")//will send an event to the front end i.e. acknowledgement which will run the frontend's callback
     // socket.broadcast.emit('newMessage',{//emitting events to all except for this socket
     //   from: message.from,
     //   text:message.text,
