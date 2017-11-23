@@ -8,7 +8,7 @@ const port=process.env.PORT||3000
 var app=express();
 var server=http.createServer(app)
 var io=socketIO(server)//we get back our websockets server
-
+const {generateMessage}=require('./utils/message')
 
 app.use(express.static(publicPath));
 
@@ -16,17 +16,9 @@ io.on('connection',(socket) => {
   console.log('New User connected');
 
 
-  socket.emit('newMessage',{
-    from:"Admin",
-    text:'Welcome to chat',
-    createdAt:new Date().getTime()
-  });
+  socket.emit('newMessage',generateMessage('Admin','Welcome to chat app'));
 
-  socket.broadcast.emit('newMessage',{
-    from:"Admin",
-    text:'New user joined',
-    createdAt:new Date().getTime()
-  })
+  socket.broadcast.emit('newMessage',generateMessage('Admin','New User joined'))
   // socket.emit('newMessage',{
   //   from:"mush@eg.com",
   //   text:"Hey sup!!",
@@ -37,11 +29,7 @@ io.on('connection',(socket) => {
   // })
   socket.on('createMessage',(message) => {//emits an event to a single connection
     console.log("createMessage ",message);
-    io.emit('newMessage',{
-      from: message.from,
-      text:message.text,
-      createdAt:new Date().getTime()
-    })
+    io.emit('newMessage',generateMessage(message.from,message.text))
     // socket.broadcast.emit('newMessage',{//emitting events to all except for this socket
     //   from: message.from,
     //   text:message.text,
