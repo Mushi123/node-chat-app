@@ -14,16 +14,21 @@ app.use(express.static(publicPath));
 
 io.on('connection',(socket) => {
   console.log('New User connected');
-  socket.emit('newMessage',{
-    from:"mush@eg.com",
-    text:"Hey sup!!",
-    createdAt:1231223
-  })
+  // socket.emit('newMessage',{
+  //   from:"mush@eg.com",
+  //   text:"Hey sup!!",
+  //   createdAt:1231223
+  // })
   // socket.on('createEmail',function(email){
   //   console.log("Email to create", email);
   // })
-  socket.on('createMessage',(message) => {
+  socket.on('createMessage',(message) => {//emits an event to a single connection
     console.log("createMessage ",message);
+    io.emit('newMessage',{
+      from: message.from,
+      text:message.text,
+      createdAt:new Date().getTime()
+    })
   })
   socket.on('disconnect',() => {
     console.log('Disconnected from client');

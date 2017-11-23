@@ -7,10 +7,10 @@ socket.on('connect',function(){
   //   to:"John@eg.com",
   //   text:"All good"
   // })That works
-  socket.emit('createMessage',{
-    from:'mush@eg.com',
-    text:'That works'
-  })
+  // socket.emit('createMessage',{
+  //   from:'mush@eg.com',
+  //   text:'That works'
+  // })
 });
 socket.on('disconnect',function()  {
   console.log("Disconnected from server");
