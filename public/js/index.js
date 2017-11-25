@@ -1,5 +1,22 @@
 var socket = io(); // initiating a request from client to server to open up a socket
 //and keep connection/socket open
+
+function scrollToBottom(){
+//selectors
+var messages=jQuery('#messages');
+var newMessage=messages.children('li:last-child')
+//heights
+var clientHeight=messages.prop('clientHeight')
+var scrollTop=messages.prop('scrollTop')
+var scrollHeight=messages.prop('scrollHeight')
+var newMessageHeight=newMessage.innerHeight();
+var lastMessageHeight=newMessage.prev().innerHeight();
+
+if(clientHeight+scrollTop+newMessageHeight+lastMessageHeight>=scrollHeight){
+  //console.log("Should scroll");
+  messages.scrollTop(scrollHeight);
+}
+}
 socket.on('connect',function(){
   console.log("Connected to server");
 
@@ -28,6 +45,7 @@ socket.on('newMessage',function(m){
     createdAt:formattedTime
   });
   jQuery('#messages').append(html)
+  scrollToBottom();
 
   // //console.log('newMessage',m);
   // var li=jQuery('<li></li>');
@@ -38,12 +56,13 @@ socket.on('newMessage',function(m){
 socket.on('newLocationMessage',function(m) {
   var formattedTime=moment(m.createdAt).format('h:mm a')
   var template=jQuery('#location-message-template').html();//return markup inside of message template which in this case is our p tag
-  var html=Mustache.render(template,{    
+  var html=Mustache.render(template,{
     from:m.from,
     createdAt:formattedTime,
     url:m.url
   });
   jQuery('#messages').append(html)
+    scrollToBottom();
 
   // var li=jQuery('<li></li>');
   // var a=jQuery('<a target="_blank">My current location</a>');
