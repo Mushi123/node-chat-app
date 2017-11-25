@@ -23,7 +23,7 @@ io.on('connection',(socket) => {
   socket.on('createMessage',(message,callback) => {//emits an event to a single connection
     console.log("createMessage ",message);
     io.emit('newMessage',generateMessage(message.from,message.text))
-    callback("This is from server")//will send an event to the front end i.e. acknowledgement which will run the frontend's callback
+    callback()//will send an event to the front end i.e. acknowledgement which will run the frontend's callback
     // socket.broadcast.emit('newMessage',{//emitting events to all except for this socket
     //   from: message.from,
     //   text:message.text,
