@@ -21,21 +21,36 @@ socket.on('disconnect',function()  {
 // });
 socket.on('newMessage',function(m){
   var formattedTime=moment(m.createdAt).format('h:mm a')
-  //console.log('newMessage',m);
-  var li=jQuery('<li></li>');
-  li.text(`${m.from} ${formattedTime}: ${m.text}`)
-  jQuery('#messages').append(li)
+  var template=jQuery('#message-template').html();//return markup inside of message template which in this case is our p tag
+  var html=Mustache.render(template,{
+    text:m.text,
+    from:m.from,
+    createdAt:formattedTime
+  });
+  jQuery('#messages').append(html)
+
+  // //console.log('newMessage',m);
+  // var li=jQuery('<li></li>');
+  // li.text(`${m.from} ${formattedTime}: ${m.text}`)
+  // jQuery('#messages').append(li)
 })
 
 socket.on('newLocationMessage',function(m) {
   var formattedTime=moment(m.createdAt).format('h:mm a')
+  var template=jQuery('#location-message-template').html();//return markup inside of message template which in this case is our p tag
+  var html=Mustache.render(template,{    
+    from:m.from,
+    createdAt:formattedTime,
+    url:m.url
+  });
+  jQuery('#messages').append(html)
 
-  var li=jQuery('<li></li>');
-  var a=jQuery('<a target="_blank">My current location</a>');
-  li.text(`${m.from} ${formattedTime}: `);
-  a.attr('href',m.url)
-  li.append(a);
-  jQuery('#messages').append(li)
+  // var li=jQuery('<li></li>');
+  // var a=jQuery('<a target="_blank">My current location</a>');
+  // li.text(`${m.from} ${formattedTime}: `);
+  // a.attr('href',m.url)
+  // li.append(a);
+  // jQuery('#messages').append(li)
 })
 
 // socket.emit('createMessage',{
