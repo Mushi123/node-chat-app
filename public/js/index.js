@@ -20,17 +20,19 @@ socket.on('disconnect',function()  {
 //   console.log('New email',email);
 // });
 socket.on('newMessage',function(m){
-  console.log('newMessage',m);
+  var formattedTime=moment(m.createdAt).format('h:mm a')
+  //console.log('newMessage',m);
   var li=jQuery('<li></li>');
-  li.text(`${m.from}: ${m.text}`)
+  li.text(`${m.from} ${formattedTime}: ${m.text}`)
   jQuery('#messages').append(li)
 })
 
 socket.on('newLocationMessage',function(m) {
+  var formattedTime=moment(m.createdAt).format('h:mm a')
 
   var li=jQuery('<li></li>');
   var a=jQuery('<a target="_blank">My current location</a>');
-  li.text(`${m.from}: `);
+  li.text(`${m.from} ${formattedTime}: `);
   a.attr('href',m.url)
   li.append(a);
   jQuery('#messages').append(li)
